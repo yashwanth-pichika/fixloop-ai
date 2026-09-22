@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
@@ -447,7 +447,7 @@ app.post('/api/diagnose', async (req, res) => {
       explanation: execution.isSuccess 
         ? 'The API executed successfully and returned a valid 2xx response payload.' 
         : `The server responded with HTTP status ${status}: ${execution.statusText}.`,
-      likelyCategory: execution.isSuccess ? 'SUCCESS' : (status === 401 || status === 403 ? 'AUTHENTICATION' : status === 404 ? 'RESOURCE_NOT_FOUND' : status === 422 || status === 400 ? 'VALIDATION' : 'SERVER_CRASH'),
+      likelyCategory: execution.isSuccess ? 'SUCCESS' : (status === 401 || status === 403 ? 'AUTHENTICATION' : status === 404 ? 'RESOURCE_NOT_FOUND' : status === 422 || status === 400 ? 'VALIDATION' : status === 500 ? 'SERVER_CRASH' : 'SCHEMA_MISMATCH'),
       suggestedFixSummary: execution.isSuccess ? 'No fix required' : 'Correct parameters or supply missing authentication header',
       suggestedRequest: JSON.parse(JSON.stringify(request)),
       diffSummary: [],
