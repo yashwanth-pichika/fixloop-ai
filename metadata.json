@@ -1,0 +1,7 @@
+{
+  "name": "FixLoop AI",
+  "description": "Intelligent mobile API testing and debugging assistant with voice input, camera OCR, automated AI diagnosis, and closed-loop fix retesting.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
