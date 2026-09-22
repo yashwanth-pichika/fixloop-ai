@@ -1,6 +1,5 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import type { 
@@ -12,14 +11,15 @@ import type {
   GeneratedTestCase
 } from './src/types.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
+app.get('/healthz', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 // In-memory state for Hackathon MVP
 let testHistory: TestHistoryItem[] = [];
@@ -481,7 +481,7 @@ app.post('/api/diagnose', async (req, res) => {
         fallbackDiagnosis.diffSummary = [{
           field: 'headers.Authorization',
           original: 'undefined',
-          suggested: 'Bearer jwt_mock_eyJhbGci...',
+          suggested: 'Bearer jwt_mock_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
           reason: 'Fulfill Bearer authentication contract'
         }];
       }
